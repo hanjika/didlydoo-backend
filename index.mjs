@@ -14,7 +14,7 @@ async function getAllEvents() {
 
         for (const date of eventDates) {
             const attendees = await db.all(
-                'SELECT attendee, available, dates_id FROM attendees WHERE dates_id=?', [date.dates_id]
+                'SELECT attendee, available FROM attendees WHERE dates_id=?', [date.dates_id]
             );
 
             let attendObj = {
@@ -45,21 +45,20 @@ async function getEventById(id) {
     const eventDates = await db.all('SELECT event_date, dates_id FROM dates WHERE event_id=?', [id])
 
     for (const date of eventDates) {
-        const attendees = await db.all('SELECT attendee, available, dates_id FROM attendees WHERE dates_id=?', [date.dates_id])
+        const attendees = await db.all('SELECT attendee, available FROM attendees WHERE dates_id=?', [date.dates_id])
 
         let attendObj = {
             attendees: attendees
         }
-
         Object.assign(date, attendObj);
     }
 
     let dateObj = {
         dates: eventDates,
     }
-
     Object.assign(EventById, dateObj);
-    console.log(EventById);
+
+    console.log(JSON.stringify(EventById, null, 2));
 
     db.close();
 
@@ -122,7 +121,7 @@ async function deleteEventById(id) {
 }
 
 // deleteEventById(7);
-// getEventById(1);
+// getEventById(8);
 // addDateToEvent(8, '2022-01-12');
 // addAttendeeToDate(14, 'Shanon', false);
 // editEvent(8, 'Updated event', 'Bunnys friend', 'Updated party info');
