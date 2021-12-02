@@ -7,7 +7,7 @@ async function getAllEvents() {
       'SELECT * from events;'
     );
     
-    for(let event of allEvents) {
+    for (const event of allEvents) {
         const eventDates = await db.all(
             'SELECT event_date, dates_id FROM dates WHERE event_id=?', [event.event_id]
         );
@@ -38,7 +38,7 @@ async function getAllEvents() {
 async function getEventById(id) {
     const db = await SQLite.open('./db/database');
 
-    const EventById = await db.get(
+    const eventById = await db.get(
         'SELECT * FROM events WHERE event_id=?', [id]
     );
 
@@ -56,9 +56,9 @@ async function getEventById(id) {
     let dateObj = {
         dates: eventDates,
     }
-    Object.assign(EventById, dateObj);
+    Object.assign(eventById, dateObj);
 
-    console.log(JSON.stringify(EventById, null, 2));
+    console.log(JSON.stringify(eventById, null, 2));
 
     db.close();
 
