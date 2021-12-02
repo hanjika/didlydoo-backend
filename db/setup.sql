@@ -9,7 +9,7 @@ CREATE TABLE dates (
   dates_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   event_id INTEGER NOT NULL,
   event_date DATE NOT NULL,
---   FOREIGN KEY(event_id) REFERENCES events(events_id)
+  FOREIGN KEY(event_id) REFERENCES events(events_id)
 );
 
 CREATE TABLE attendees (
@@ -17,7 +17,7 @@ CREATE TABLE attendees (
   dates_id INTEGER NOT NULL,
   attendee VARCHAR(255) NOT NULL,
   available TINYINT(1) NOT NULL,
---   FOREIGN KEY(dates_id) REFERENCES dates(dates_id)
+  FOREIGN KEY(dates_id) REFERENCES dates(dates_id)
 );
 
 INSERT INTO events (event_name, event_author, event_description)
