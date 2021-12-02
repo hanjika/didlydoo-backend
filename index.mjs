@@ -20,21 +20,18 @@ async function getAllEvents() {
             let attendObj = {
                 attendees: attendees
             };
-
             Object.assign(date, attendObj);
         }
 
         let dateObj = {
             dates: eventDates
         };
-
         Object.assign(event, dateObj);
     }
-  
     console.log(JSON.stringify(allEvents, null, 2));
   
     db.close();
-  
+
     return allEvents;
 }
 
@@ -72,7 +69,7 @@ async function getEventById(id) {
 async function addDateToEvent(id, date) {
     const db = await SQLite.open('./db/database');
 
-    const insertDate = await db.get(
+    const insertDate = await db.run(
         'INSERT INTO dates (event_id, event_date) VALUES (?, ?)', [id, date]
     );
 
@@ -80,10 +77,10 @@ async function addDateToEvent(id, date) {
     return insertDate;
 }
 
-async function addAttendeeToEvent(dates_id, attendee_name, available) {
+async function addAttendeeToDate(dates_id, attendee_name, available) {
     const db = await SQLite.open('./db/database');
 
-    const addAttendee = await db.get(
+    const addAttendee = await db.run(
         'INSERT INTO attendees (dates_id, attendee, available) VALUES (?, ?, ?)', [dates_id, attendee_name, available]
     );
 
@@ -94,7 +91,7 @@ async function addAttendeeToEvent(dates_id, attendee_name, available) {
 async function editEvent(id, name, author, description) {
     const db = await SQLite.open('./db/database');
 
-    const edit = await db.get(
+    const edit = await db.run(
         'UPDATE events SET event_name = ?, event_author = ?, event_description = ? WHERE event_id = ?', [name, author, description, id]
     );
 
@@ -105,7 +102,7 @@ async function editEvent(id, name, author, description) {
 async function addNewEvent(name, author, description) {
     const db = await SQLite.open('./db/database');
 
-    const addEvent = await db.get(
+    const addEvent = await db.run(
         'INSERT INTO events (event_name, event_author, event_description) VALUES (?, ?, ?)', [name, author, description]
     );
 
@@ -124,10 +121,10 @@ async function deleteEventById(id) {
     return event;
 }
 
-// deleteEventById(5);
+// deleteEventById(7);
 // getEventById(1);
-// addDateToEvent(4, '2022-01-10');
-// addAttendeeToEvent(13, 'Sloth', true);
-// editEvent(1, 'New party', 'Bob', 'Updated party info');
-// addNewEvent('New Event 2', 'Elfy', 'Added another new event');
+// addDateToEvent(8, '2022-01-12');
+// addAttendeeToDate(14, 'Shanon', false);
+// editEvent(8, 'Updated event', 'Bunnys friend', 'Updated party info');
+// addNewEvent('New Event 3', 'Bunny', 'Added another new event AGAIN');
 getAllEvents(); 
