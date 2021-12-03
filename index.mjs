@@ -1,10 +1,10 @@
 import SQLite from 'sqlite-async';
 
-async function getAllEvents() {
+export async function getAllEvents() {
     const db = await SQLite.open('./db/database');
   
     const allEvents = await db.all(
-      'SELECT * from events;'
+      'SELECT * FROM events'
     );
     
     for (const event of allEvents) {
@@ -28,14 +28,49 @@ async function getAllEvents() {
         };
         Object.assign(event, dateObj);
     }
-    console.log(JSON.stringify(allEvents, null, 2));
+    // console.log(JSON.stringify(allEvents, null, 2));
   
     db.close();
 
     return allEvents;
 }
 
-async function getEventById(id) {
+// export async function getAllEvents() {
+//     const db = await SQLite.open('./db/database');
+  
+//     const allEvents = await db.all(
+//       'SELECT * FROM events LEFT JOIN dates ON events.event_id = dates.event_id LEFT JOIN attendees ON dates.dates_id = attendees.dates_id'
+//     );
+    
+//     // for (const event of allEvents) {
+//     //     const eventDates = await db.all(
+//     //         'SELECT event_date, dates_id FROM dates WHERE event_id=?', [event.event_id]
+//     //     );
+
+//     //     for (const date of eventDates) {
+//     //         const attendees = await db.all(
+//     //             'SELECT attendee, available FROM attendees WHERE dates_id=?', [date.dates_id]
+//     //         );
+
+//     //         let attendObj = {
+//     //             attendees: attendees
+//     //         };
+//     //         Object.assign(date, attendObj);
+//     //     }
+
+//     //     let dateObj = {
+//     //         dates: eventDates
+//     //     };
+//     //     Object.assign(event, dateObj);
+//     // }
+//     console.log(JSON.stringify(allEvents, null, 2));
+  
+//     db.close();
+
+//     return allEvents;
+// }
+
+export async function getEventById(id) {
     const db = await SQLite.open('./db/database');
 
     const eventById = await db.get(
@@ -58,25 +93,28 @@ async function getEventById(id) {
     }
     Object.assign(eventById, dateObj);
 
-    console.log(JSON.stringify(eventById, null, 2));
+    // console.log(JSON.stringify(eventById, null, 2));
 
     db.close();
 
-    return EventById;
+    return eventById;
 }
 
-async function addDateToEvent(id, date) {
+export async function addDatesToEvent(id, dates) {
     const db = await SQLite.open('./db/database');
+    let insertDate;
 
-    const insertDate = await db.run(
-        'INSERT INTO dates (event_id, event_date) VALUES (?, ?)', [id, date]
-    );
+    for (const date of dates) {
+        insertDate = await db.run(
+            'INSERT INTO dates (event_id, event_date) VALUES (?, ?)', [id, date]
+        );
+    };
 
     db.close();
     return insertDate;
 }
 
-async function addAttendeeToDate(dates_id, attendee_name, available) {
+export async function addAttendeeToDate(dates_id, attendee_name, available) {
     const db = await SQLite.open('./db/database');
 
     const addAttendee = await db.run(
@@ -87,7 +125,7 @@ async function addAttendeeToDate(dates_id, attendee_name, available) {
     return addAttendee;
 }
 
-async function editEvent(id, name, author, description) {
+export async function editEvent(id, name, author, description) {
     const db = await SQLite.open('./db/database');
 
     const edit = await db.run(
@@ -98,7 +136,7 @@ async function editEvent(id, name, author, description) {
     return edit;
 }
 
-async function addNewEvent(name, author, description) {
+export async function addNewEvent(name, author, description) {
     const db = await SQLite.open('./db/database');
 
     const addEvent = await db.run(
@@ -109,7 +147,7 @@ async function addNewEvent(name, author, description) {
     return addEvent;
 }
 
-async function deleteEventById(id) {
+export async function deleteEventById(id) {
     const db = await SQLite.open('./db/database');
 
     const event = await db.run(
